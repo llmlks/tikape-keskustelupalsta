@@ -28,7 +28,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
     @Override
     public Keskustelunavaus findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelunavaus WHERE id = " + key);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelunavaus WHERE id = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -37,7 +37,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
             return null;
         }
 
-        Integer id = rs.getInt("id");
+        Integer id = rs.getInt("avaus_id");
         Integer alue_id = rs.getInt("alue_id");
         String nimi = rs.getString("nimi");
 
@@ -58,7 +58,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
         ResultSet rs = stmt.executeQuery();
         List<Keskustelunavaus> avaukset = new ArrayList<>();
         while (rs.next()) {
-            Integer id = rs.getInt("id");
+            Integer id = rs.getInt("avaus_id");
             Integer alue_id = rs.getInt("alue_id");
             String nimi = rs.getString("nimi");
 
@@ -75,7 +75,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("DELETE * FROM Keskustelunavaus WHERE id = " + key);
+        PreparedStatement stmt = connection.prepareStatement("DELETE * FROM Keskustelunavaus WHERE id = ?");
         stmt.setObject(1, key);
 
         stmt.executeQuery();

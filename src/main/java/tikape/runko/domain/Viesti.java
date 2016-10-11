@@ -55,4 +55,8 @@ public class Viesti {
         this.nimimerkki = nimimerkki;
     }
     
+    public String toString() {
+        return this.id + " " + this.sisalto;
+    }
+    
 }
