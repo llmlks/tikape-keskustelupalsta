@@ -27,11 +27,11 @@ public class Keskustelualue {
         this.id = id;
     }
 
-    public Integer getNimi() {
+    public String getNimi() {
         return nimi;
     }
 
-    public void setNimi(Integer nimi) {
+    public void setNimi(String nimi) {
         this.nimi = nimi;
     }
     
