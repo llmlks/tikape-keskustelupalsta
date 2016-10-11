@@ -57,7 +57,7 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         ResultSet rs = stmt.executeQuery();
         List<Keskustelualue> alueet = new ArrayList<>();
         while (rs.next()) {
-            Integer id = rs.getInt("id");
+            Integer id = rs.getInt("alue_id");
             String nimi = rs.getString("nimi");
 
             alueet.add(new Keskustelualue(id, nimi));

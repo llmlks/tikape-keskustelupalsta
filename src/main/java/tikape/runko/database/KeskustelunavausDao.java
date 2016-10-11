@@ -83,4 +83,12 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
         connection.close();
     }
     
+    public void save(Keskustelunavaus avaus) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelunavaus (alue_id, nimi) VALUES (" + avaus.getAlue_id() + ", " + avaus.getNimi() + ")");
+        stmt.executeQuery();
+        stmt.close();
+        connection.close();
+    }
+    
 }

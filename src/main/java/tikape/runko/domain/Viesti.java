@@ -1,6 +1,8 @@
 
 package tikape.runko.domain;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author llmlks
@@ -9,11 +11,11 @@ public class Viesti {
     
     private Integer id;
     private Integer avaus_id;
-    private timestamp aika;
+    private Timestamp aika;
     private String sisalto;
     private String nimimerkki;
 
-    public Viesti(Integer id, Integer avaus_id, timestamp aika, String sisalto, String nimimerkki) {
+    public Viesti(Integer id, Integer avaus_id, Timestamp aika, String sisalto, String nimimerkki) {
         this.id = id;
         this.avaus_id = avaus_id;
         this.aika = aika;
