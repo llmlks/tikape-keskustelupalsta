@@ -35,5 +35,9 @@ public class Keskustelualue {
         this.nimi = nimi;
     }
     
+    public String toString() {
+        return this.id + " " + this.nimi;
+    }
+    
     
 }

@@ -45,4 +45,8 @@ public class Keskustelunavaus {
         this.nimi = nimi;
     }
     
+    public String toString() {
+        return this.id + " " + this.nimi;
+    }
+    
 }

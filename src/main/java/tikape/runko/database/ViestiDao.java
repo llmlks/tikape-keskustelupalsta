@@ -28,7 +28,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     @Override
     public Viesti findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE id = " + key);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE id = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -37,7 +37,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             return null;
         }
 
-        Integer id = rs.getInt("id");
+        Integer id = rs.getInt("viesti_id");
         Integer avaus_id = rs.getInt("avaus_id");
         Timestamp aika = rs.getTimestamp("aika");
         String sisalto = rs.getString("sisalto");
@@ -59,7 +59,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         ResultSet rs = stmt.executeQuery();
         List<Viesti> viestit = new ArrayList<>();
         while (rs.next()) {
-            Integer id = rs.getInt("id");
+            Integer id = rs.getInt("viesti_id");
             Integer avaus_id = rs.getInt("avaus_id");
             Timestamp aika = rs.getTimestamp("aika");
             String sisalto = rs.getString("sisalto");
@@ -78,7 +78,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("DELETE * FROM Viesti WHERE id = " + key);
+        PreparedStatement stmt = connection.prepareStatement("DELETE * FROM Viesti WHERE id = ?");
         stmt.setObject(1, key);
 
         stmt.executeQuery();
