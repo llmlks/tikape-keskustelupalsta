@@ -85,5 +85,15 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         stmt.close();
         connection.close();
     }
+
+    @Override
+    public Viesti create(Viesti t) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(String key, Viesti t) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

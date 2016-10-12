@@ -90,5 +90,15 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
         stmt.close();
         connection.close();
     }
+
+    @Override
+    public Keskustelunavaus create(Keskustelunavaus t) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(String key, Keskustelunavaus t) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

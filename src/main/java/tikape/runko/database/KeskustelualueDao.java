@@ -27,47 +27,13 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
     
     @Override
     public Keskustelualue findOne(Integer key) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue WHERE id = " + key);
-        stmt.setObject(1, key);
-
-        ResultSet rs = stmt.executeQuery();
-        boolean hasOne = rs.next();
-        if (!hasOne) {
-            return null;
-        }
-
-        Integer id = rs.getInt("id");
-        String nimi = rs.getString("nimi");
-
-        Keskustelualue alue = new Keskustelualue(id, nimi);
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return alue;
+        return (Keskustelualue) database.queryAndCollect("SELECT * FROM Keskustelualue WHERE id = ?", rs -> new Keskustelualue(Integer.parseInt(rs.getString("id")), rs.getString("nimi")), key);
+        
     }
 
     @Override
     public List findAll() throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue");
-
-        ResultSet rs = stmt.executeQuery();
-        List<Keskustelualue> alueet = new ArrayList<>();
-        while (rs.next()) {
-            Integer id = rs.getInt("alue_id");
-            String nimi = rs.getString("nimi");
-
-            alueet.add(new Keskustelualue(id, nimi));
-        }
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return alueet;
+       return database.queryAndCollect("SELECT * FROM Keskustelualue", rs -> new Keskustelualue(Integer.parseInt(rs.getString("alue_id")), rs.getString("nimi")));
     }
 
     @Override
@@ -79,6 +45,16 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         stmt.executeQuery();
         stmt.close();
         connection.close();
+    }
+
+    @Override
+    public Keskustelualue create(Keskustelualue t) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(String key, Keskustelualue t) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
