@@ -18,22 +18,22 @@ import tikape.runko.domain.Keskustelualue;
  * @author llmlks
  */
 public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
-    
+
     private Database database;
-    
+
     public KeskustelualueDao(Database database) {
         this.database = database;
     }
-    
+
     @Override
     public Keskustelualue findOne(Integer key) throws SQLException {
-        return (Keskustelualue) database.queryAndCollect("SELECT * FROM Keskustelualue WHERE id = ?", rs -> new Keskustelualue(Integer.parseInt(rs.getString("id")), rs.getString("nimi")), key);
-  
+        return (Keskustelualue) database.queryAndCollect("SELECT * FROM Keskustelualue WHERE alue_id = ?", rs -> new Keskustelualue(rs.getInt("alue_id"), rs.getString("nimi")), key).get(0);
+
     }
 
     @Override
     public List findAll() throws SQLException {
-       return database.queryAndCollect("SELECT * FROM Keskustelualue", rs -> new Keskustelualue(Integer.parseInt(rs.getString("alue_id")), rs.getString("nimi")));
+        return database.queryAndCollect("SELECT * FROM Keskustelualue", rs -> new Keskustelualue(Integer.parseInt(rs.getString("alue_id")), rs.getString("nimi")));
     }
 
     @Override
@@ -49,12 +49,18 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
 
     @Override
     public Keskustelualue create(Keskustelualue t) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelualue(nimi) VALUES (?)");
+        stmt.setObject(1, t.getNimi());
+        stmt.executeUpdate();
+        stmt.close();
+        connection.close();
+        return t;
     }
 
     @Override
     public void update(String key, Keskustelualue t) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
-    
+
 }

@@ -2,20 +2,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Otsikko</title>
+        <title>Keskustelupalsta</title>
         <meta charset="utf-8" />
     </head>
 
     <body>
-        <h1>Alue</h1>
-        <ul>
-            <li th:each="keskustelualue: ${keskustelualue}">
-                <span th:text="${keskustelualue.id}">1</span> <span th:text="${keskustelualue.nimi}">nimi</span>
-                
-            </li>
-        </ul>
-        
-        
+        <h2>Etusivu</h2>
+
+        <table>
+
+            <tr>
+                <th>Keskustelualueet</th>
+            </tr>
+
+            <tr th:each="keskustelualue: ${keskustelualue}">
+                <td>
+                    <span th:text="${keskustelualue.id}">1</span> 
+                    <a th:href="@{~/alue/{id}(id=${keskustelualue.id})}" th:text="${keskustelualue.nimi}"></a> 
+                </td>
+            </tr>
+        </table>
+
+       
+        <h2>Lisää keskustelualue</h2>
+
+        <form method="POST" th:action="@{~/keskustelualue}">
+            <input type="text" name="name"/>
+            <input type="submit" value="Lisää!"/>
+        </form>
+
         <p><a href="/opiskelijat">__.</a></p>
     </body>
 </html>

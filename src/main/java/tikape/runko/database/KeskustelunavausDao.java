@@ -20,56 +20,21 @@ import tikape.runko.domain.Keskustelunavaus;
 public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
 
     private Database database;
-    
+    private KeskustelualueDao kaDao;
     public KeskustelunavausDao(Database db) {
         this.database = db;
+        kaDao = new KeskustelualueDao(db);
     }
-    
+
     @Override
     public Keskustelunavaus findOne(Integer key) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelunavaus WHERE id = ?");
-        stmt.setObject(1, key);
+        return (Keskustelunavaus) database.queryAndCollect("SELECT * FROM Keskustelunavaus WHERE avaus_id = ?", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi")), key).get(0);
 
-        ResultSet rs = stmt.executeQuery();
-        boolean hasOne = rs.next();
-        if (!hasOne) {
-            return null;
-        }
-
-        Integer id = rs.getInt("avaus_id");
-        Integer alue_id = rs.getInt("alue_id");
-        String nimi = rs.getString("nimi");
-
-        Keskustelunavaus avaus = new Keskustelunavaus(id, alue_id, nimi);
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return avaus;    
     }
 
-    @Override
-    public List findAll() throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelunavaus");
+    public List findAllWithId(Integer key) throws SQLException {
+        return database.queryAndCollect("SELECT * FROM Keskustelunavaus WHERE alue_id = ?", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi")), key);
 
-        ResultSet rs = stmt.executeQuery();
-        List<Keskustelunavaus> avaukset = new ArrayList<>();
-        while (rs.next()) {
-            Integer id = rs.getInt("avaus_id");
-            Integer alue_id = rs.getInt("alue_id");
-            String nimi = rs.getString("nimi");
-
-            avaukset.add(new Keskustelunavaus(id, alue_id, nimi));
-        }
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return avaukset;    
     }
 
     @Override
@@ -82,7 +47,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
         stmt.close();
         connection.close();
     }
-    
+
     public void save(Keskustelunavaus avaus) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelunavaus (alue_id, nimi) VALUES (" + avaus.getAlue_id() + ", " + avaus.getNimi() + ")");
@@ -93,12 +58,24 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
 
     @Override
     public Keskustelunavaus create(Keskustelunavaus t) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelunavaus(alue_id, nimi) VALUES (?, ?)");
+        stmt.setObject(1, t.getAlue_id());
+        stmt.setObject(2, t.getNimi());
+        stmt.executeUpdate();
+        stmt.close();
+        connection.close();
+        return t;
     }
 
     @Override
     public void update(String key, Keskustelunavaus t) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public List<Keskustelunavaus> findAll() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
