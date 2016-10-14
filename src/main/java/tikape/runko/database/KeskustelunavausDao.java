@@ -36,6 +36,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
         return database.queryAndCollect("SELECT * FROM Keskustelunavaus WHERE alue_id = ?", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi")), key);
 
     }
+    
 
     @Override
     public void delete(Integer key) throws SQLException {
@@ -75,7 +76,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
 
     @Override
     public List<Keskustelunavaus> findAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return database.queryAndCollect("SELECT * FROM Keskustelunavaus", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi")));
     }
 
 }

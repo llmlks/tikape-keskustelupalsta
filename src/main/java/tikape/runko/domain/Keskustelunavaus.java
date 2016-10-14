@@ -10,10 +10,11 @@ package tikape.runko.domain;
  * @author llmlks
  */
 public class Keskustelunavaus {
-    
+
     private Integer id;
     private Integer alue_id;
     private String nimi;
+    private Integer viesteja;
 
     public Keskustelunavaus(Integer id, Integer alue_id, String nimi) {
         this.id = id;
@@ -23,6 +24,14 @@ public class Keskustelunavaus {
 
     public Integer getId() {
         return id;
+    }
+
+    public void setViestit(Integer v) {
+        this.viesteja = v;
+    }
+    
+    public Integer getViestit() {
+        return this.viesteja;
     }
 
     public void setId(Integer id) {
@@ -44,9 +53,9 @@ public class Keskustelunavaus {
     public void setNimi(String nimi) {
         this.nimi = nimi;
     }
-    
+
     public String toString() {
         return this.id + " " + this.nimi;
     }
-    
+
 }

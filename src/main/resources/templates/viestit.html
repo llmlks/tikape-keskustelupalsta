@@ -2,29 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title th:text="${keskustelualue.nimi}">Keskustelualue</title>
+        <title th:text="${keskustelunavaus.nimi}">Keskustelualue</title>
         <meta charset="utf-8" />
     </head>
 
     <body>
         <h2>
-            Aiheen <i><span th:text="${keskustelualue.nimi}">Keskustelualue</span></i> keskustelunavaukset
+            <i><span th:text="${keskustelunavaus.nimi}">Keskusteluavaukset</span></i>
         </h2>
         <table>
-            <tr th:each="keskustelunavaus: ${keskustelunavaukset}">
+            <tr th:each="viesti: ${viestit}">
                 <td>
-                    <a th:href="@{~/avaus/{id}(id=${keskustelunavaus.id})}" th:text="${keskustelunavaus.nimi}"></a> 
+                (<span th:text="${viesti.id}">1</span>) <span th:text="${viesti.sisalto}">chatviesti</span>
+                t. <span th:text="${viesti.nimimerkki}">nick</span>
                 </td>
             </tr>
-           
         </table>
 
 
-        <h2>Luo uusi keskustelunavaus</h2>
+        <h2>Lisää uusi viesti</h2>
 
-        <form method="POST" th:action="@{~/alue/{id}/avaus(id=${keskustelualue.id})}">
-            <textarea name="name" rows="1" cols="75" maxlength="75">Keskustelunavauksen nimi</textarea><br />
-            <textarea name="viesti" rows="5" cols="80" maxlength="1000">Avausviesti</textarea><br />
+        <form method="POST" th:action="@{~/avaus/{id}/luoviesti(id=${keskustelunavaus.id})}">
+            <textarea rows="5" cols="80" name="viesti" maxlength="1000">Viesti </textarea><br />
             <input type="text" value="Nimimerkki" name="nimimerkki" />
             <input type="submit" value="Lisää!"/>
         </form>
@@ -36,6 +35,5 @@
                     window.history.back();
                 }
             </script></p>
-
     </body>
 </html>

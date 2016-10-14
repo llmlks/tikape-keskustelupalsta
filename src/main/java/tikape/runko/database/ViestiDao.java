@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import tikape.runko.domain.Viesti;
+
 /**
  *
  * @author llmlks
@@ -20,11 +21,11 @@ import tikape.runko.domain.Viesti;
 public class ViestiDao implements Dao<Viesti, Integer> {
 
     private Database database;
-    
+
     public ViestiDao(Database db) {
         this.database = db;
     }
-    
+
     @Override
     public Viesti findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
@@ -49,7 +50,8 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         stmt.close();
         connection.close();
 
-        return o;    }
+        return o;
+    }
 
     @Override
     public List findAll() throws SQLException {
@@ -74,6 +76,11 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
         return viestit;
     }
+    
+    public List findAllWithId(Integer key) throws SQLException {
+        return database.queryAndCollect("SELECT * FROM Viesti WHERE avaus_id = ?", rs -> new Viesti(rs.getInt("viesti_id"), rs.getInt("avaus_id"), rs.getTimestamp("aika"), rs.getString("sisalto"), rs.getString("nimimerkki")), key);
+
+    }
 
     @Override
     public void delete(Integer key) throws SQLException {
@@ -88,12 +95,22 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
     @Override
     public Viesti create(Viesti t) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(viesti_id, avaus_id, aika, sisalto, nimimerkki) VALUES (?, ?, ?, ?, ?)");
+        stmt.setObject(1, t.getId());
+        stmt.setObject(2, t.getAvaus_id());
+        stmt.setObject(3, t.getTime());
+        stmt.setObject(4, t.getSisalto());
+        stmt.setObject(5, t.getNimimerkki());
+        stmt.executeUpdate();
+        stmt.close();
+        connection.close();
+        return t;
     }
 
     @Override
     public void update(String key, Viesti t) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

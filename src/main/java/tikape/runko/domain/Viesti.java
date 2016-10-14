@@ -26,6 +26,10 @@ public class Viesti {
     public Integer getId() {
         return id;
     }
+    
+    public Timestamp getTime() {
+        return aika;
+    }
 
     public void setId(Integer id) {
         this.id = id;

@@ -1,5 +1,6 @@
 package tikape.runko;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,9 +10,10 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import tikape.runko.database.Database;
 import tikape.runko.database.KeskustelualueDao;
 import tikape.runko.database.KeskustelunavausDao;
-import tikape.runko.database.OpiskelijaDao;
+import tikape.runko.database.ViestiDao;
 import tikape.runko.domain.Keskustelualue;
 import tikape.runko.domain.Keskustelunavaus;
+import tikape.runko.domain.Viesti;
 
 public class Main {
 
@@ -21,6 +23,9 @@ public class Main {
 
         KeskustelualueDao keskustelualueet = new KeskustelualueDao(database);
         KeskustelunavausDao keskustelunavaus = new KeskustelunavausDao(database);
+        ViestiDao viestit = new ViestiDao(database);
+        java.util.Date date = new java.util.Date();
+
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("keskustelualue", keskustelualueet.findAll());
@@ -31,7 +36,7 @@ public class Main {
         post("/keskustelualue", (req, res) -> {
             String nimi = req.queryParams("name");
             keskustelualueet.create(new Keskustelualue(0, nimi));
-            
+
             res.redirect("/");
             return "";
         });
@@ -41,9 +46,14 @@ public class Main {
             int id = Integer.parseInt(req.params(":id"));
             List<Keskustelunavaus> k = keskustelunavaus.findAllWithId(id);
             Keskustelualue keal = keskustelualueet.findOne(id);
+            List<Integer> viestienmaara = new ArrayList<>();
+            for (Keskustelunavaus k1 : k) {
+                k1.setViestit(viestit.findAllWithId(k1.getId()).size());
+            }
             // k.setItems(items.itemsByCategory(Integer.parseInt(req.params(":id"))));
             map.put("keskustelunavaukset", k);
             map.put("keskustelualue", keal);
+            map.put("viestimaarat", viestienmaara);
             // map.put("items", k.getItems());
             return new ModelAndView(map, "avaukset");
 
@@ -52,8 +62,45 @@ public class Main {
         post("/alue/:id/avaus", (req, res) -> {
             String name = req.queryParams("name");
             int alueid = Integer.parseInt(req.params(":id"));
+            String viesti = req.queryParams("viesti");
+            String kirjoittaja = req.queryParams("nimimerkki");
+            List<Keskustelunavaus> k = keskustelunavaus.findAll();
+            int vikaId = 0;
+            try {
+                vikaId = k.get(k.size() - 1).getId() + 1;
+            } catch (Exception e) {
+
+            }
             keskustelunavaus.create(new Keskustelunavaus(0, alueid, name));
+
+            Viesti v = new Viesti(1, vikaId, new Timestamp(date.getTime()), viesti, kirjoittaja);
+            viestit.create(v);
             res.redirect("/alue/" + alueid);
+            return "";
+        });
+
+        get("/avaus/:id", (req, res) -> {
+            HashMap<String, Object> map = new HashMap<>();
+            int id2 = Integer.parseInt(req.params(":id"));
+            List<Viesti> v = viestit.findAllWithId(id2);
+            Keskustelunavaus keav = keskustelunavaus.findOne(id2);
+            // k.setItems(items.itemsByCategory(Integer.parseInt(req.params(":id"))));
+            map.put("viestit", v);
+            map.put("keskustelunavaus", keav);
+            // map.put("items", k.getItems());
+            return new ModelAndView(map, "viestit");
+
+        }, new ThymeleafTemplateEngine());
+
+        post("/avaus/:id/luoviesti", (req, res) -> {
+            int avausid = Integer.parseInt(req.params(":id"));
+            String viesti = req.queryParams("viesti");
+            String kirjoittaja = req.queryParams("nimimerkki");
+            List<Viesti> avauksenviestit = viestit.findAllWithId(avausid);
+            int viestiId = avauksenviestit.get(avauksenviestit.size()-1).getId() + 1;
+            Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()), viesti, kirjoittaja);
+            viestit.create(v);
+            res.redirect("/avaus/" + avausid);
             return "";
         });
     }
