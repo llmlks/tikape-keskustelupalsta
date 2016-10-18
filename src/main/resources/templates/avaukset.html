@@ -11,9 +11,20 @@
             Aiheen <i><span th:text="${keskustelualue.nimi}">Keskustelualue</span></i> keskustelunavaukset
         </h2>
         <table>
+            <tr>
+                <th>Keskustelunavaus</th>
+                <th>Viestejä</th>
+                <th>Viimeisin viesti</th>
+            </tr>
             <tr th:each="keskustelunavaus: ${keskustelunavaukset}">
                 <td>
                     <a th:href="@{~/avaus/{id}(id=${keskustelunavaus.id})}" th:text="${keskustelunavaus.nimi}"></a> 
+                </td>
+                <td>
+                    <span th:text="${keskustelunavaus.viestit}">viestit</span>
+                </td>
+                <td>
+                    <span th:text="${keskustelunavaus.viimeisin}">viimeisin</span>
                 </td>
             </tr>
            

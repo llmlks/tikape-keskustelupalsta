@@ -29,9 +29,9 @@ public class Kayttoliityma {
     }
 
 
-    public void kaynnista() throws ClassNotFoundException, SQLException {
+    public void kaynnista() throws ClassNotFoundException, SQLException, Exception {
         Database database = new Database("jdbc:sqlite:keskustelufoorumi.db");
-        database.init();            // Tämä tosin voidaan suorittaa vain kerran, sillä se sisältää create table-käskyt
+//        database.init();            // Tämä tosin voidaan suorittaa vain kerran, sillä se sisältää create table-käskyt
 
         // Dao-olioilmentymät
         KeskustelualueDao keskustelualueDao = new KeskustelualueDao(database);

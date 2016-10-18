@@ -28,7 +28,17 @@ public class Main {
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("keskustelualue", keskustelualueet.findAll());
+            List<Keskustelualue> keal = keskustelualueet.findAll();
+            for (Keskustelualue k : keal) {
+                int viesteja = 0;
+                List<Keskustelunavaus> keav = keskustelunavaus.findAllWithId(k.getId());
+                for (Keskustelunavaus k1 : keav) {
+                    viesteja += viestit.findAllWithId(k1.getId()).size();
+                }
+                k.setViestit(viesteja);
+            }
+            
+            map.put("keskustelualue", keal);
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
@@ -97,8 +107,9 @@ public class Main {
             String viesti = req.queryParams("viesti");
             String kirjoittaja = req.queryParams("nimimerkki");
             List<Viesti> avauksenviestit = viestit.findAllWithId(avausid);
-            int viestiId = avauksenviestit.get(avauksenviestit.size()-1).getId() + 1;
+            int viestiId = avauksenviestit.size() + 1;
             Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()), viesti, kirjoittaja);
+            
             viestit.create(v);
             res.redirect("/avaus/" + avausid);
             return "";

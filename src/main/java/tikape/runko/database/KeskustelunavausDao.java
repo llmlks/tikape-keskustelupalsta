@@ -33,8 +33,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
     }
 
     public List findAllWithId(Integer key) throws SQLException {
-        return database.queryAndCollect("SELECT * FROM Keskustelunavaus WHERE alue_id = ?", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi")), key);
-
+        return database.queryAndCollect("SELECT k.nimi, k.avaus_id, k.alue_id, COUNT(v.sisalto) AS viesteja, MAX(v.aika) AS viimeisin FROM Keskustelunavaus k INNER JOIN Viesti v ON k.avaus_id = v.avaus_id WHERE k.alue_id = ? GROUP BY k.nimi ORDER BY v.aika DESC LIMIT 10", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi"), rs.getTimestamp("viimeisin")), key);
     }
     
 

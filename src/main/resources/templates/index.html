@@ -12,7 +12,9 @@
         <table>
 
             <tr>
-                <th>Keskustelualueet</th>
+                <th><i>Keskustelualueet</i></th>
+                <th><i>Viestejä yhteensä</i></th>
+                <th><i>Viimeisin viesti</i></th>
             </tr>
 
             <tr th:each="keskustelualue: ${keskustelualue}">
@@ -20,6 +22,10 @@
                     <span th:text="${keskustelualue.id}">1</span> 
                     <a th:href="@{~/alue/{id}(id=${keskustelualue.id})}" th:text="${keskustelualue.nimi}"></a> 
                 </td>
+                <td>
+                    <span th:text="${keskustelualue.viestit}">viestit</span>
+                </td>
+                <td></td>
             </tr>
             
         </table>

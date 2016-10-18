@@ -5,6 +5,8 @@
  */
 package tikape.runko.domain;
 
+import java.sql.Timestamp;
+
 /**
  *
  * @author llmlks
@@ -13,6 +15,16 @@ public class Keskustelualue {
     
     private Integer id;
     private String nimi;
+    private Integer viestit;
+    private Timestamp viimeisin;
+
+    public Timestamp getViimeisin() {
+        return viimeisin;
+    }
+
+    public void setViimeisin(Timestamp viimeisin) {
+        this.viimeisin = viimeisin;
+    }
     
     public Keskustelualue(int id, String nimi) {
         this.id = id;
@@ -33,6 +45,14 @@ public class Keskustelualue {
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
+    }
+    
+    public Integer getViestit() {
+        return this.viestit;
+    }
+    
+    public void setViestit(int v) {
+        this.viestit = v;
     }
     
     public String toString() {
