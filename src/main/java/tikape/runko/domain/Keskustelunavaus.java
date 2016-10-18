@@ -17,7 +17,7 @@ public class Keskustelunavaus {
     private Integer alue_id;
     private String nimi;
     private Integer viestit;
-    private Timestamp viimeisin;
+    private String viimeisin;
 
     public Keskustelunavaus(Integer id, Integer alue_id, String nimi) {
         this.id = id;
@@ -28,7 +28,7 @@ public class Keskustelunavaus {
     
 
 
-    public Keskustelunavaus(Integer id, Integer alue_id, String nimi, Timestamp viimeisin) {
+    public Keskustelunavaus(Integer id, Integer alue_id, String nimi, String viimeisin) {
         this.id = id;
         this.alue_id = alue_id;
         this.nimi = nimi;
@@ -67,11 +67,11 @@ public class Keskustelunavaus {
         this.nimi = nimi;
     }
     
-    public Timestamp getViimeisin() {
+    public String getViimeisin() {
         return viimeisin;
     }
 
-    public void setViimeisin(Timestamp viimeisin) {
+    public void setViimeisin(String viimeisin) {
         this.viimeisin = viimeisin;
     }
 

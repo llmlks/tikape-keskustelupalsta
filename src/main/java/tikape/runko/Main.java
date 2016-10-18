@@ -16,7 +16,7 @@ import tikape.runko.domain.Keskustelunavaus;
 import tikape.runko.domain.Viesti;
 
 public class Main {
-
+    
     public static void main(String[] args) throws Exception {
 
         Database database = new Database("jdbc:sqlite:opiskelijat.db");
@@ -25,6 +25,8 @@ public class Main {
         KeskustelunavausDao keskustelunavaus = new KeskustelunavausDao(database);
         ViestiDao viestit = new ViestiDao(database);
         java.util.Date date = new java.util.Date();
+        
+
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -83,7 +85,7 @@ public class Main {
             }
             keskustelunavaus.create(new Keskustelunavaus(0, alueid, name));
 
-            Viesti v = new Viesti(1, vikaId, new Timestamp(date.getTime()), viesti, kirjoittaja);
+            Viesti v = new Viesti(1, vikaId, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
             viestit.create(v);
             res.redirect("/alue/" + alueid);
             return "";
@@ -108,7 +110,7 @@ public class Main {
             String kirjoittaja = req.queryParams("nimimerkki");
             List<Viesti> avauksenviestit = viestit.findAllWithId(avausid);
             int viestiId = avauksenviestit.size() + 1;
-            Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()), viesti, kirjoittaja);
+            Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
             
             viestit.create(v);
             res.redirect("/avaus/" + avausid);

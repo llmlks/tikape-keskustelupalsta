@@ -11,11 +11,11 @@ public class Viesti {
     
     private Integer id;
     private Integer avaus_id;
-    private Timestamp aika;
+    private String aika;
     private String sisalto;
     private String nimimerkki;
 
-    public Viesti(Integer id, Integer avaus_id, Timestamp aika, String sisalto, String nimimerkki) {
+    public Viesti(Integer id, Integer avaus_id, String aika, String sisalto, String nimimerkki) {
         this.id = id;
         this.avaus_id = avaus_id;
         this.aika = aika;
@@ -27,7 +27,7 @@ public class Viesti {
         return id;
     }
     
-    public Timestamp getTime() {
+    public String getTime() {
         return aika;
     }
 

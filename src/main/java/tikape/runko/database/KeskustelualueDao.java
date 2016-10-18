@@ -33,7 +33,7 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
 
     @Override
     public List findAll() throws SQLException {
-        return database.queryAndCollect("SELECT * FROM Keskustelualue", rs -> new Keskustelualue(Integer.parseInt(rs.getString("alue_id")), rs.getString("nimi")));
+        return database.queryAndCollect("SELECT Keskustelualue.nimi, Keskustelualue.alue_id, COUNT(Viesti.sisalto) AS viesteja, MAX(Viesti.aika) AS viimeisin FROM Keskustelualue LEFT JOIN Keskustelunavaus ON Keskustelualue.alue_id = Keskustelunavaus.alue_id LEFT JOIN Viesti ON Keskustelunavaus.avaus_id = Viesti.avaus_id GROUP BY Keskustelualue.nimi ORDER BY Keskustelualue.nimi COLLATE NOCASE", rs -> new Keskustelualue(Integer.parseInt(rs.getString("alue_id")), rs.getString("nimi"), rs.getString("viimeisin")));
     }
 
     @Override

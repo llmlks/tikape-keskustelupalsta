@@ -40,7 +40,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
         Integer id = rs.getInt("viesti_id");
         Integer avaus_id = rs.getInt("avaus_id");
-        Timestamp aika = rs.getTimestamp("aika");
+        String aika = rs.getString("aika");
         String sisalto = rs.getString("sisalto");
         String nimimerkki = rs.getString("nimimerkki");
 
@@ -63,7 +63,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         while (rs.next()) {
             Integer id = rs.getInt("viesti_id");
             Integer avaus_id = rs.getInt("avaus_id");
-            Timestamp aika = rs.getTimestamp("aika");
+            String aika = rs.getString("aika");
             String sisalto = rs.getString("sisalto");
             String nimimerkki = rs.getString("nimimerkki");
 
@@ -78,7 +78,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     }
     
     public List findAllWithId(Integer key) throws SQLException {
-        return database.queryAndCollect("SELECT * FROM Viesti WHERE avaus_id = ?", rs -> new Viesti(rs.getInt("viesti_id"), rs.getInt("avaus_id"), rs.getTimestamp("aika"), rs.getString("sisalto"), rs.getString("nimimerkki")), key);
+        return database.queryAndCollect("SELECT * FROM Viesti WHERE avaus_id = ?", rs -> new Viesti(rs.getInt("viesti_id"), rs.getInt("avaus_id"), rs.getString("aika"), rs.getString("sisalto"), rs.getString("nimimerkki")), key);
 
     }
 
@@ -96,12 +96,11 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     @Override
     public Viesti create(Viesti t) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(viesti_id, avaus_id, aika, sisalto, nimimerkki) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(viesti_id, avaus_id, aika, sisalto, nimimerkki) VALUES (?, ?, DATETIME(strftime('%s', 'now'), 'unixepoch', 'localtime'), ?, ?)");
         stmt.setObject(1, t.getId());
         stmt.setObject(2, t.getAvaus_id());
-        stmt.setObject(3, t.getTime());
-        stmt.setObject(4, t.getSisalto());
-        stmt.setObject(5, t.getNimimerkki());
+        stmt.setObject(3, t.getSisalto());
+        stmt.setObject(4, t.getNimimerkki());
         stmt.executeUpdate();
         stmt.close();
         connection.close();

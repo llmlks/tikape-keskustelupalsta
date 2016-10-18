@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.h2.tools.RunScript;
@@ -30,6 +31,25 @@ public class Database<T> {
         conn.close();
     }
 
+    public void init() {
+        List<String> lauseet = sqliteLauseet();
+
+        // "try with resources" sulkee resurssin automaattisesti lopuksi
+        try (Connection conn = getConnection()) {
+            Statement st = conn.createStatement();
+
+            // suoritetaan komennot
+            for (String lause : lauseet) {
+                System.out.println("Running command >> " + lause);
+                st.executeUpdate(lause);
+            }
+
+        } catch (Throwable t) {
+            // jos tietokantataulu on jo olemassa, ei komentoja suoriteta
+            System.out.println("Error >> " + t.getMessage());
+        }
+}    
+    
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(address, "sa", "");
     }
@@ -105,4 +125,19 @@ public class Database<T> {
 
         System.out.println();
     }
+
+    private List<String> sqliteLauseet() {
+        ArrayList<String> lista = new ArrayList<>();
+
+        // tietokantataulujen luomiseen tarvittavat komennot suoritusjärjestyksessä
+        lista.add("CREATE TABLE Keskustelualue (alue_id integer PRIMARY KEY, nimi varchar(50) NOT NULL);");
+        lista.add("CREATE TABLE Keskustelunavaus (avaus_id integer PRIMARY KEY, alue_id integer NOT NULL, nimi varchar(75) NOT NULL, FOREIGN KEY (alue_id) REFERENCES Keskustelualue (alue_id));");
+        lista.add("CREATE TABLE Viesti (viesti_id integer PRIMARY KEY, avaus_id integer NOT NULL, aika varchar NOT NULL, sisalto varchar(1000) NOT NULL, nimimerkki varchar(30) NOT NULL, FOREIGN KEY (avaus_id) REFERENCES Keskustelunavaus (avaus_id));");
+        lista.add("INSERT INTO Keskustelualue (nimi) VALUES('Tietokoneet');");
+        lista.add("INSERT INTO Keskustelualue (nimi) VALUES('Elokuvat');");
+        lista.add("INSERT INTO Keskustelualue (nimi) VALUES('Musiikki');");
+
+
+        return lista;
+}
 }

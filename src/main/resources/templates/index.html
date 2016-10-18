@@ -19,13 +19,14 @@
 
             <tr th:each="keskustelualue: ${keskustelualue}">
                 <td>
-                    <span th:text="${keskustelualue.id}">1</span> 
                     <a th:href="@{~/alue/{id}(id=${keskustelualue.id})}" th:text="${keskustelualue.nimi}"></a> 
                 </td>
                 <td>
                     <span th:text="${keskustelualue.viestit}">viestit</span>
                 </td>
-                <td></td>
+                <td>
+                    <span th:text="${keskustelualue.viimeisin}">viimeisin</span>
+                </td>
             </tr>
             
         </table>

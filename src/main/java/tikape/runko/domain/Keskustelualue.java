@@ -16,19 +16,25 @@ public class Keskustelualue {
     private Integer id;
     private String nimi;
     private Integer viestit;
-    private Timestamp viimeisin;
+    private String viimeisin;
 
-    public Timestamp getViimeisin() {
+    public String getViimeisin() {
         return viimeisin;
     }
 
-    public void setViimeisin(Timestamp viimeisin) {
+    public void setViimeisin(String viimeisin) {
         this.viimeisin = viimeisin;
     }
     
     public Keskustelualue(int id, String nimi) {
         this.id = id;
         this.nimi = nimi;
+    }
+    
+    public Keskustelualue(int id, String nimi, String viimeisin) {
+        this.id = id;
+        this.nimi = nimi;
+        this.viimeisin = viimeisin;
     }
 
     public Integer getId() {
