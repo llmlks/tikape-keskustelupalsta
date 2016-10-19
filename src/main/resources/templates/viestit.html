@@ -29,7 +29,7 @@
 
         <h2>Lisää uusi viesti</h2>
 
-        <form method="POST" th:action="@{~/avaus/{id}/luoviesti(id=${keskustelunavaus.id})}">
+        <form method="POST" th:action="@{~/avaus/{id}/luoviesti(id=${sivu})}">
             <textarea rows="5" cols="80" name="viesti" maxlength="1000">Viesti </textarea><br />
             <input type="text" value="Nimimerkki" name="nimimerkki" />
             <input type="submit" value="Lisää!"/>

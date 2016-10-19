@@ -170,7 +170,8 @@ public class Main {
         });        
         
         post("/avaus/:id/luoviesti", (req, res) -> {
-            int avausid = Integer.parseInt(req.params(":id"));
+            String[] params = req.params(":id").split("_");
+            int avausid = Integer.parseInt(params[0]);
             String viesti = req.queryParams("viesti");
             String kirjoittaja = req.queryParams("nimimerkki");
             
@@ -181,7 +182,7 @@ public class Main {
                 Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
                 viestit.create(v);
             }
-            res.redirect("/avaus/" + avausid);
+            res.redirect("/avaus_sivu/" + params[0] + "_" + params[1]);
             return "";
         });
         
