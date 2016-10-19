@@ -39,14 +39,10 @@
             <input type="text" value="Nimimerkki" name="nimimerkki" />
             <input type="submit" value="Lisää!"/>
         </form>
-
-        <p><button onclick="goBack()">Takaisin</button>
-
-            <script>
-                function goBack() {
-                    window.history.back();
-                }
-            </script></p>
+        
+        <form method="GET" th:action="@{~/}">
+            <input type="submit" value="Takaisin etusivulle"/>
+        </form>
 
     </body>
 </html>

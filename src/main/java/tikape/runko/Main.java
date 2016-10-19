@@ -47,7 +47,9 @@ public class Main {
 
         post("/keskustelualue", (req, res) -> {
             String nimi = req.queryParams("name");
-            keskustelualueet.create(new Keskustelualue(0, nimi));
+            
+            if (!nimi.isEmpty())
+                keskustelualueet.create(new Keskustelualue(0, nimi));
 
             res.redirect("/");
             return "";
@@ -76,17 +78,19 @@ public class Main {
             int alueid = Integer.parseInt(req.params(":id"));
             String viesti = req.queryParams("viesti");
             String kirjoittaja = req.queryParams("nimimerkki");
-            List<Keskustelunavaus> k = keskustelunavaus.findAll();
-            int vikaId = 0;
-            try {
-                vikaId = k.get(k.size() - 1).getId() + 1;
-            } catch (Exception e) {
+            if (!(name.isEmpty() || viesti.isEmpty() || kirjoittaja.isEmpty())) {
+                List<Keskustelunavaus> k = keskustelunavaus.findAll();
+                int vikaId = 0;
+                try {
+                    vikaId = k.get(k.size() - 1).getId() + 1;
+                } catch (Exception e) {
 
+                }
+                keskustelunavaus.create(new Keskustelunavaus(0, alueid, name));
+
+                Viesti v = new Viesti(1, vikaId, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
+                viestit.create(v);
             }
-            keskustelunavaus.create(new Keskustelunavaus(0, alueid, name));
-
-            Viesti v = new Viesti(1, vikaId, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
-            viestit.create(v);
             res.redirect("/alue/" + alueid);
             return "";
         });
@@ -100,20 +104,95 @@ public class Main {
             map.put("viestit", v);
             map.put("keskustelunavaus", keav);
             // map.put("items", k.getItems());
+                        
+            res.redirect("/avaus_sivu/" + id2 + "_" + 1);
+            
             return new ModelAndView(map, "viestit");
 
         }, new ThymeleafTemplateEngine());
 
+        get("avaus_sivu/:sivu", (req, res) -> {
+            String[] params = req.params(":sivu").split("_");
+            HashMap<String, Object> map = new HashMap<>();
+            int id2 = Integer.parseInt(params[0]);
+            int sivu = Integer.parseInt(params[1]);
+            List<Viesti> v = viestit.findAllWithId(id2);
+            int alku = (sivu - 1) * 10;
+            int loppu = v.size();
+            
+            if (v.size() - alku + 1 > 10) {
+                loppu = alku + 10;
+            }
+            
+            List<Viesti> viesti = v.subList(alku, loppu);
+            Keskustelunavaus keav = keskustelunavaus.findOne(id2);
+            // k.setItems(items.itemsByCategory(Integer.parseInt(req.params(":id"))));
+            map.put("viestit", viesti);
+            map.put("keskustelunavaus", keav);
+            map.put("sivu", req.params(":sivu"));
+                        
+            return new ModelAndView(map, "viestit");
+            
+        }, new ThymeleafTemplateEngine());
+        
+        post("/avaus_sivu/:sivu/edellinen", (req, res) -> {
+            String[] params = req.params(":sivu").split("_");
+
+            int sivu = Integer.parseInt(params[1]);
+
+            if (sivu > 1) {
+                sivu--;
+            }
+            
+            res.redirect("/avaus_sivu/" + params[0] + "_" + sivu);
+            
+            return ""; 
+        });
+        
+        post("/avaus_sivu/:sivu/seuraava", (req, res) -> {
+            String[] params = req.params(":sivu").split("_");
+
+            int sivu = Integer.parseInt(params[1]);
+ 
+            List<Viesti> v = viestit.findAllWithId(Integer.parseInt(params[0]));
+
+            
+            int sivuja = (int) Math.ceil(v.size() / 10.0);
+            
+            if (sivu < sivuja) {
+                sivu++;
+            }
+
+                        
+            res.redirect("/avaus_sivu/" + params[0] + "_" + sivu);
+            
+            return ""; 
+        });        
+        
         post("/avaus/:id/luoviesti", (req, res) -> {
             int avausid = Integer.parseInt(req.params(":id"));
             String viesti = req.queryParams("viesti");
             String kirjoittaja = req.queryParams("nimimerkki");
-            List<Viesti> avauksenviestit = viestit.findAllWithId(avausid);
-            int viestiId = avauksenviestit.size() + 1;
-            Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
             
-            viestit.create(v);
+            if (!viesti.isEmpty() && !kirjoittaja.isEmpty()) {
+                List<Viesti> avauksenviestit = viestit.findAllWithId(avausid);
+                int viestiId = avauksenviestit.size() + 1;
+
+                Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
+                viestit.create(v);
+            }
             res.redirect("/avaus/" + avausid);
+            return "";
+        });
+        
+        
+        post("/avaus_sivu/:sivu/alue", (req, res) -> {
+            String[] params = req.params(":sivu").split("_");
+            Keskustelunavaus keav = keskustelunavaus.findOne(Integer.parseInt(params[0]));
+            
+            
+            res.redirect("/alue/" + keav.getAlue_id());
+            
             return "";
         });
     }

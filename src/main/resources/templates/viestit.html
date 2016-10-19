@@ -18,7 +18,14 @@
                 </td>
             </tr>
         </table>
-
+        
+        <form method="POST" th:action="@{~/avaus_sivu/{sivu}/edellinen (sivu=${sivu})}">
+            <input type="submit" value="Edellinen sivu"/>
+        </form>
+        
+        <form method="POST" th:action="@{~/avaus_sivu/{sivu}/seuraava (sivu=${sivu})}">
+            <input type="submit" value="Seuraava sivu"/>
+        </form>
 
         <h2>Lisää uusi viesti</h2>
 
@@ -28,12 +35,12 @@
             <input type="submit" value="Lisää!"/>
         </form>
 
-        <p><button onclick="goBack()">Takaisin</button>
-
-            <script>
-                function goBack() {
-                    window.history.back();
-                }
-            </script></p>
+        <form method="POST" th:action="@{~/avaus_sivu/{sivu}/alue (sivu=${sivu})}">
+            <input type="submit" value="Takaisin keskustelualueelle"/>
+        </form>
+        
+        <form method="GET" th:action="@{~/}">
+            <input type="submit" value="Takaisin etusivulle"/>
+        </form>
     </body>
 </html>
