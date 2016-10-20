@@ -19,13 +19,14 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
 
-        Database database = new Database("jdbc:sqlite:opiskelijat.db");
+        Database database = new Database("jdbc:sqlite:testi.db");
 
         KeskustelualueDao keskustelualueet = new KeskustelualueDao(database);
         KeskustelunavausDao keskustelunavaus = new KeskustelunavausDao(database);
         ViestiDao viestit = new ViestiDao(database);
         java.util.Date date = new java.util.Date();
         
+        database.init();
 
 
         get("/", (req, res) -> {
