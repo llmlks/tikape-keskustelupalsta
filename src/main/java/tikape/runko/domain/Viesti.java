@@ -14,6 +14,7 @@ public class Viesti {
     private String aika;
     private String sisalto;
     private String nimimerkki;
+    private Integer rivi;
 
     public Viesti(Integer id, Integer avaus_id, String aika, String sisalto, String nimimerkki) {
         this.id = id;
@@ -57,6 +58,14 @@ public class Viesti {
 
     public void setNimimerkki(String nimimerkki) {
         this.nimimerkki = nimimerkki;
+    }
+
+    public Integer getRivi() {
+        return rivi;
+    }
+
+    public void setRivi(Integer rivi) {
+        this.rivi = rivi;
     }
     
     public String toString() {

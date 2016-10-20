@@ -96,11 +96,10 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     @Override
     public Viesti create(Viesti t) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(viesti_id, avaus_id, aika, sisalto, nimimerkki) VALUES (?, ?, DATETIME(strftime('%s', 'now'), 'unixepoch', 'localtime'), ?, ?)");
-        stmt.setObject(1, t.getId());
-        stmt.setObject(2, t.getAvaus_id());
-        stmt.setObject(3, t.getSisalto());
-        stmt.setObject(4, t.getNimimerkki());
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(avaus_id, aika, sisalto, nimimerkki) VALUES (?, DATETIME(strftime('%s', 'now'), 'unixepoch', 'localtime'), ?, ?)");
+        stmt.setObject(1, t.getAvaus_id());
+        stmt.setObject(2, t.getSisalto());
+        stmt.setObject(3, t.getNimimerkki());
         stmt.executeUpdate();
         stmt.close();
         connection.close();

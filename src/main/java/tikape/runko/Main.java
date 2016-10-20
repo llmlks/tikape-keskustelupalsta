@@ -124,8 +124,11 @@ public class Main {
             if (v.size() - alku + 1 > 10) {
                 loppu = alku + 10;
             }
-            
+            for (int i = alku; i < loppu; i++) {
+                v.get(i).setRivi(i + 1);
+            }            
             List<Viesti> viesti = v.subList(alku, loppu);
+
             Keskustelunavaus keav = keskustelunavaus.findOne(id2);
             // k.setItems(items.itemsByCategory(Integer.parseInt(req.params(":id"))));
             map.put("viestit", viesti);
@@ -175,15 +178,16 @@ public class Main {
             int avausid = Integer.parseInt(params[0]);
             String viesti = req.queryParams("viesti");
             String kirjoittaja = req.queryParams("nimimerkki");
+            List<Viesti> v = viestit.findAllWithId(Integer.parseInt(params[0]));
             
             if (!viesti.isEmpty() && !kirjoittaja.isEmpty()) {
                 List<Viesti> avauksenviestit = viestit.findAllWithId(avausid);
                 int viestiId = avauksenviestit.size() + 1;
 
-                Viesti v = new Viesti(viestiId, avausid, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
-                viestit.create(v);
+                Viesti vi = new Viesti(viestiId, avausid, new Timestamp(date.getTime()).toString(), viesti, kirjoittaja);
+                viestit.create(vi);
             }
-            res.redirect("/avaus_sivu/" + params[0] + "_" + params[1]);
+            res.redirect("/avaus_sivu/" + params[0] + "_" + (int) Math.ceil(v.size() / 10.0));
             return "";
         });
         

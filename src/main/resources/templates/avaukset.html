@@ -34,9 +34,9 @@
         <h2>Luo uusi keskustelunavaus</h2>
 
         <form method="POST" th:action="@{~/alue/{id}/avaus(id=${keskustelualue.id})}">
-            <textarea name="name" rows="1" cols="75" maxlength="75">Keskustelunavauksen nimi</textarea><br />
-            <textarea name="viesti" rows="5" cols="80" maxlength="1000">Avausviesti</textarea><br />
-            <input type="text" value="Nimimerkki" name="nimimerkki" />
+            <textarea name="name" placeholder="Keskustelunavauksen nimi" rows="1" cols="75" maxlength="75"></textarea><br />
+            <textarea name="viesti" placeholder="Viesti" rows="5" cols="80" maxlength="1000"></textarea><br />
+            <input type="text" placeholder="Nimimerkki" name="nimimerkki" maxlength="30"/>
             <input type="submit" value="Lisää!"/>
         </form>
         

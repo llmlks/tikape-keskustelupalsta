@@ -35,7 +35,7 @@
         <h2>Lisää keskustelualue</h2>
 
         <form method="POST" th:action="@{~/keskustelualue}">
-            <input type="text" name="name"/>
+            <input type="text" placeholder="Keskustelualueen nimi" name="name" maxlength="50"/>
             <input type="submit" value="Lisää!"/>
         </form>
 

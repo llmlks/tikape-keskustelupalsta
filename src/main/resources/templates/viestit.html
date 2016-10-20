@@ -13,7 +13,7 @@
         <table>
             <tr th:each="viesti: ${viestit}">
                 <td>
-                (<span th:text="${viesti.id}">1</span>) <span th:text="${viesti.sisalto}">chatviesti</span>
+                (<span th:text="${viesti.rivi}">1</span>) <span th:text="${viesti.sisalto}">chatviesti</span>
                 t. <span th:text="${viesti.nimimerkki}">nick</span>
                 </td>
             </tr>
@@ -30,8 +30,8 @@
         <h2>Lisää uusi viesti</h2>
 
         <form method="POST" th:action="@{~/avaus/{id}/luoviesti(id=${sivu})}">
-            <textarea rows="5" cols="80" name="viesti" maxlength="1000">Viesti </textarea><br />
-            <input type="text" value="Nimimerkki" name="nimimerkki" />
+            <textarea rows="5" cols="80" placeholder="Viesti" name="viesti" maxlength="1000"></textarea><br />
+            <input type="text" placeholder="Nimimerkki" name="nimimerkki" maxlength="30"/>
             <input type="submit" value="Lisää!"/>
         </form>
 
