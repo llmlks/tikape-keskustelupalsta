@@ -4,23 +4,38 @@
     <head>
         <title th:text="${keskustelualue.nimi}">Keskustelualue</title>
         <meta charset="utf-8" />
+        <style>
+            tr:nth-child(even) {background-color: #ffe699}
+            table {
+                width: 700px;
+            }
+            td.col1 {
+                text-align: left;
+            }
+            body {
+                background-color: #fff2cc;
+                text-align: center;
+            }
+            th {
+                background-color: #ff8533;
+        </style>
     </head>
 
     <body>
         <h2>
             Aiheen <i><span th:text="${keskustelualue.nimi}">Keskustelualue</span></i> keskustelunavaukset
         </h2>
-        <table>
+        <table cellpadding="10" align="center">
             <tr>
                 <th>Keskustelunavaus</th>
                 <th>Viestejä</th>
                 <th>Viimeisin viesti</th>
             </tr>
             <tr th:each="keskustelunavaus: ${keskustelunavaukset}">
-                <td>
+                <td class="col1">
                     <a th:href="@{~/avaus/{id}(id=${keskustelunavaus.id})}" th:text="${keskustelunavaus.nimi}"></a> 
                 </td>
-                <td>
+                <td class="col2">
                     <span th:text="${keskustelunavaus.viestit}">viestit</span>
                 </td>
                 <td>
@@ -34,7 +49,7 @@
         <h2>Luo uusi keskustelunavaus</h2>
 
         <form method="POST" th:action="@{~/alue/{id}/avaus(id=${keskustelualue.id})}">
-            <textarea name="name" placeholder="Keskustelunavauksen nimi" rows="1" cols="75" maxlength="75"></textarea><br />
+            <input type="text" name="name" placeholder="Keskustelunavauksen nimi" style="width: 560px" maxlength="75"/><br/>
             <textarea name="viesti" placeholder="Viesti" rows="5" cols="80" maxlength="1000"></textarea><br />
             <input type="text" placeholder="Nimimerkki" name="nimimerkki" maxlength="30"/>
             <input type="submit" value="Lisää!"/>
@@ -43,6 +58,11 @@
         <form method="GET" th:action="@{~/}">
             <input type="submit" value="Takaisin etusivulle"/>
         </form>
+        
+        <p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Chat_bubbles.svg" alt="chat bubbles" align="top"></img>
+
+        </p>
 
     </body>
 </html>
