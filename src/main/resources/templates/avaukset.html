@@ -12,6 +12,9 @@
             td.col1 {
                 text-align: left;
             }
+            
+            .example {     width: 560px;   }
+            
             body {
                 background-color: #fff2cc;
                 text-align: center;
@@ -50,7 +53,7 @@
 
         <form method="POST" th:action="@{~/alue/{id}/avaus(id=${keskustelualue.id})}">
             <input type="text" name="name" placeholder="Keskustelunavauksen nimi" style="width: 560px" maxlength="75"/><br/>
-            <textarea name="viesti" placeholder="Viesti" rows="5" cols="80" maxlength="1000"></textarea><br />
+            <textarea class="example" name="viesti" placeholder="Viesti" rows="5" cols="80" maxlength="1000"></textarea><br />
             <input type="text" placeholder="Nimimerkki" name="nimimerkki" maxlength="30"/>
             <input type="submit" value="Lisää!"/>
         </form>
