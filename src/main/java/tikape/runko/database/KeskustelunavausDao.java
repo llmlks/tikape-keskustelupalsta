@@ -35,24 +35,16 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
     }
 
     public List findAllWithId(Integer key) throws SQLException {
-        return database.queryAndCollect("SELECT k.nimi, k.avaus_id, k.alue_id, COUNT(v.sisalto) AS viesteja, MAX(v.aika) AS viimeisin FROM Keskustelunavaus k INNER JOIN Viesti v ON k.avaus_id = v.avaus_id WHERE k.alue_id = ? GROUP BY k.nimi ORDER BY v.aika DESC LIMIT 10", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi"), rs.getString("viimeisin")), key);
+        return database.queryAndCollect("SELECT k.nimi, k.avaus_id, k.alue_id, COUNT(v.sisalto) AS viesteja, MAX(v.aika) AS viimeisin FROM Keskustelunavaus k INNER JOIN Viesti v ON k.avaus_id = v.avaus_id WHERE k.alue_id = ? GROUP BY k.avaus_id ORDER BY v.aika DESC LIMIT 10", rs -> new Keskustelunavaus(rs.getInt("avaus_id"), rs.getInt("alue_id"), rs.getString("nimi"), rs.getString("viimeisin")), key);
     }
     
-
+    //Jatkokehitystä varten
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("DELETE * FROM Keskustelunavaus WHERE id = ?");
         stmt.setObject(1, key);
 
-        stmt.executeQuery();
-        stmt.close();
-        connection.close();
-    }
-
-    public void save(Keskustelunavaus avaus) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelunavaus (alue_id, nimi) VALUES (" + avaus.getAlue_id() + ", " + avaus.getNimi() + ")");
         stmt.executeQuery();
         stmt.close();
         connection.close();
@@ -70,6 +62,7 @@ public class KeskustelunavausDao implements Dao<Keskustelunavaus, Integer> {
         return t;
     }
 
+    //Jatkokehitystä varten
     @Override
     public void update(String key, Keskustelunavaus t) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

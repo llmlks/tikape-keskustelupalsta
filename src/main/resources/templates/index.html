@@ -4,21 +4,42 @@
     <head>
         <title>Keskustelupalsta</title>
         <meta charset="utf-8" />
+        <style>
+            tr:nth-child(even) {background-color: #ffe699}
+            table {
+                width: 700px;
+                text-align: center;
+            }
+            td.col1 {
+                text-align: left;
+            }
+            body {
+                background-color: #fff2cc;
+                text-align: center;
+            }
+            th {
+                background-color: #ff8533;
+                text-align: center;
+            }
+            h2 {
+                text-align: center;
+            }
+        </style>
     </head>
 
     <body>
         <h2>Etusivu</h2>
 
-        <table>
+        <table cellpadding="10" align="center">
 
             <tr>
-                <th><i>Keskustelualueet</i></th>
-                <th><i>Viestejä yhteensä</i></th>
-                <th><i>Viimeisin viesti</i></th>
+                <th>Keskustelualueet</th>
+                <th>Viestejä yhteensä</th>
+                <th>Viimeisin viesti</th>
             </tr>
 
             <tr th:each="keskustelualue: ${keskustelualue}">
-                <td>
+                <td class="col1">
                     <a th:href="@{~/alue/{id}(id=${keskustelualue.id})}" th:text="${keskustelualue.nimi}"></a> 
                 </td>
                 <td>
@@ -35,9 +56,15 @@
         <h2>Lisää keskustelualue</h2>
 
         <form method="POST" th:action="@{~/keskustelualue}">
-            <input type="text" name="name"/>
+            <input type="text" placeholder="Keskustelualueen nimi" name="name" maxlength="50"/>
             <input type="submit" value="Lisää!"/>
+
         </form>
+        
+        <p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Chat_bubbles.svg" alt="chat bubbles" align="top"></img>
+
+        </p>
 
     </body>
 </html>

@@ -1,5 +1,6 @@
 package tikape.runko.database;
 import java.io.FileReader;
+import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,8 +33,13 @@ public class Database<T> {
     }
 
     public void init() {
-        List<String> lauseet = sqliteLauseet();
-
+        List<String> lauseet = null;
+        if (this.address.contains("postgres")) {
+            lauseet = postgreLauseet();
+        } else {
+            lauseet = sqliteLauseet();
+        }
+        
         // "try with resources" sulkee resurssin automaattisesti lopuksi
         try (Connection conn = getConnection()) {
             Statement st = conn.createStatement();
@@ -51,6 +57,21 @@ public class Database<T> {
 }    
     
     public Connection getConnection() throws SQLException {
+        if (this.address.contains("postgres")) {
+            try {
+                URI dbUri = new URI(address);
+
+                String username = dbUri.getUserInfo().split(":")[0];
+                String password = dbUri.getUserInfo().split(":")[1];
+                String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+                return DriverManager.getConnection(dbUrl, username, password);
+            } catch (Throwable t) {
+                System.out.println("Error: " + t.getMessage());
+                t.printStackTrace();
+            }
+        }
+
         return DriverManager.getConnection(address, "sa", "");
     }
 
@@ -139,5 +160,18 @@ public class Database<T> {
 
 
         return lista;
-}
+    }
+    
+    private List<String> postgreLauseet() {
+        ArrayList<String> lista = new ArrayList<>();
+                
+        lista.add("CREATE TABLE Keskustelualue (alue_id SERIAL PRIMARY KEY, nimi varchar(50) NOT NULL);");
+        lista.add("CREATE TABLE Keskustelunavaus (avaus_id SERIAL PRIMARY KEY, alue_id integer NOT NULL, nimi varchar(75) NOT NULL, FOREIGN KEY (alue_id) REFERENCES Keskustelualue (alue_id));");
+        lista.add("CREATE TABLE Viesti (viesti_id SERIAL PRIMARY KEY, avaus_id integer NOT NULL, aika varchar NOT NULL, sisalto varchar(1000) NOT NULL, nimimerkki varchar(30) NOT NULL, FOREIGN KEY (avaus_id) REFERENCES Keskustelunavaus (avaus_id));");
+        lista.add("INSERT INTO Keskustelualue (nimi) VALUES('Tietokoneet');");
+        lista.add("INSERT INTO Keskustelualue (nimi) VALUES('Elokuvat');");
+        lista.add("INSERT INTO Keskustelualue (nimi) VALUES('Musiikki');");
+        
+        return lista;
+    }
 }

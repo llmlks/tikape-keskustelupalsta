@@ -36,6 +36,7 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         return database.queryAndCollect("SELECT Keskustelualue.nimi, Keskustelualue.alue_id, COUNT(Viesti.sisalto) AS viesteja, MAX(Viesti.aika) AS viimeisin FROM Keskustelualue LEFT JOIN Keskustelunavaus ON Keskustelualue.alue_id = Keskustelunavaus.alue_id LEFT JOIN Viesti ON Keskustelunavaus.avaus_id = Viesti.avaus_id GROUP BY Keskustelualue.nimi ORDER BY Keskustelualue.nimi COLLATE NOCASE", rs -> new Keskustelualue(Integer.parseInt(rs.getString("alue_id")), rs.getString("nimi"), rs.getString("viimeisin")));
     }
 
+    //Jatkokehitystä varten
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
@@ -57,7 +58,8 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         connection.close();
         return t;
     }
-
+    
+    //Jatkokehitystä varten
     @Override
     public void update(String key, Keskustelualue t) throws SQLException {
 

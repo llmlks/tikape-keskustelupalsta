@@ -4,36 +4,59 @@
     <head>
         <title th:text="${keskustelunavaus.nimi}">Keskustelualue</title>
         <meta charset="utf-8" />
+        <style>
+            tr:nth-child(even) {background-color: #ffe699}
+            td.col1 {
+                text-align: left;
+            }
+            body {
+                background-color: #fff2cc;
+                text-align: center;
+            }
+            th {
+                background-color: #ff8533;
+            }
+            form {
+                display: inline-block;
+            }
+        </style>
     </head>
 
     <body>
         <h2>
             <i><span th:text="${keskustelunavaus.nimi}">Keskusteluavaukset</span></i>
         </h2>
-        <table>
+        <table cellpadding="10" align="center">
             <tr th:each="viesti: ${viestit}">
-                <td>
-                (<span th:text="${viesti.id}">1</span>) <span th:text="${viesti.sisalto}">chatviesti</span>
+                <td class="col1">
+                (<span th:text="${viesti.rivi}">1</span>) <span th:text="${viesti.sisalto}">chatviesti</span>
                 t. <span th:text="${viesti.nimimerkki}">nick</span>
                 </td>
             </tr>
         </table>
-
+        
+        <form method="POST" th:action="@{~/avaus_sivu/{sivu}/edellinen (sivu=${sivu})}">
+            <input type="submit" value="Edellinen sivu"/>
+        </form>
+        
+        <form method="POST" th:action="@{~/avaus_sivu/{sivu}/seuraava (sivu=${sivu})}">
+            <input type="submit" value="Seuraava sivu"/>
+        </form>
 
         <h2>Lisää uusi viesti</h2>
 
-        <form method="POST" th:action="@{~/avaus/{id}/luoviesti(id=${keskustelunavaus.id})}">
-            <textarea rows="5" cols="80" name="viesti" maxlength="1000">Viesti </textarea><br />
-            <input type="text" value="Nimimerkki" name="nimimerkki" />
+        <form method="POST" th:action="@{~/avaus/{id}/luoviesti(id=${sivu})}">
+            <textarea rows="5" cols="80" placeholder="Viesti" name="viesti" maxlength="1000"></textarea><br />
+            <input type="text" placeholder="Nimimerkki" name="nimimerkki" maxlength="30"/>
             <input type="submit" value="Lisää!"/>
+        </form><br/><br/>
+
+        <form method="POST" th:action="@{~/avaus_sivu/{sivu}/alue (sivu=${sivu})}">
+            <input type="submit" value="Takaisin keskustelualueelle"/>
         </form>
-
-        <p><button onclick="goBack()">Takaisin</button>
-
-            <script>
-                function goBack() {
-                    window.history.back();
-                }
-            </script></p>
+        
+        <form method="GET" th:action="@{~/}">
+            <input type="submit" value="Takaisin etusivulle"/>
+        </form>
     </body>
 </html>
